@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->text('access_token');
             $table->text('refresh_token');
             $table->timestamp('token_expires_at');
-            $table->rememberToken();
+            $table->rememberToken();//preserves the user's session
             $table->timestamps();
         });
     }

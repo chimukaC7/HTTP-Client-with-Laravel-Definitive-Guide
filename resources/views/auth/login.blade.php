@@ -53,10 +53,12 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
+                                {{-- --}}
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
 
+                                {{--more like the way login with google or facebook works --}}
                                 <a href="{{$authorizationUrl}}" class="btn btn-success">
                                     Connect with API
                                 </a>

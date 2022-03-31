@@ -9,6 +9,7 @@ trait ConsumesExternalServices
     /**
      * Send a request to any service
      * @return sdtClass|string
+     * [] -> optional
      */
     public function makeRequest($method, $requestUrl, $queryParams = [], $formParams = [], $headers = [], $hasFile = false)
     {
@@ -32,7 +33,7 @@ trait ConsumesExternalServices
             }
         }
 
-        $response = $client->request($method, $requestUrl, [
+        $response = $client->request($method, $requestUrl, [//result of a request
             'query' => $queryParams,
             $bodyType => $hasFile ? $multipart : $formParams,
             'headers' => $headers,

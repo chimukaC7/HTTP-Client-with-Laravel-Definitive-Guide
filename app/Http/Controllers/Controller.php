@@ -13,13 +13,13 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
-     * The market service to consume from this clien
+     * The market service to consume from this client
      * @var App\Services\MarketService
      */
     protected $marketService;
 
     public function __construct(MarketService $marketService)
     {
-        $this->marketService = $marketService;
+        $this->marketService = $marketService;//injectint an instance of market service
     }
 }

@@ -4,11 +4,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-2">
+
             <div class="row">
                 <div class="col">
                     <h2>Categories</h2>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col">
                     <ul class="list-group">
@@ -20,13 +22,17 @@
                     </ul>
                 </div>
             </div>
+
         </div>
+
         <div class="col">
+
             <div class="row">
                 <div class="col">
                     <h2 class="display-2">Products</h2>
                 </div>
             </div>
+
             <div class="row">
                 @foreach($products as $product)
                     <div class="col-4">
@@ -42,6 +48,7 @@
                     </div>
                 @endforeach
             </div>
+
         </div>
     </div>
 </div>

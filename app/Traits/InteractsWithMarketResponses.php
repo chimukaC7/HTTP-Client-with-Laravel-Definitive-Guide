@@ -21,7 +21,7 @@ trait InteractsWithMarketResponses
      */
     public function checkIfErrorResponse($response)
     {
-        if (isset($response->error)) {
+        if (isset($response->error)) {//if the response contains an error element inside it
             throw new \Exception("Something failed: {$response->error}");
         }
     }

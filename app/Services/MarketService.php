@@ -18,6 +18,7 @@ class MarketService
 
     public function __construct()
     {
+        //filename.service
         $this->baseUri = config('services.market.base_uri');
     }
 

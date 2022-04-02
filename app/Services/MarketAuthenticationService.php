@@ -113,6 +113,8 @@ class MarketAuthenticationService
     //into our client using the information provided by the API.
 
     //AUTHORISATION CODE GRANT------------------------------------------------------------------------------------------
+    //The authorization code grant should be very familiar if you’ve ever signed into an application using your Facebook or Google account.
+
     //Generate the URL to obtain users authorisation
     public function generateAuthorizationUrl(): string
     {
@@ -168,6 +170,8 @@ class MarketAuthenticationService
     //END OF AUTHORISATION CODE GRANT-----------------------------------------------------------------------------------
 
     //PASSWORD GRANT----------------------------------------------------------------------------------------------------
+    //This grant is a great user experience for trusted first party clients both on the web and in native device applications.
+
     // Obtains an access token the user credentials/Resource owner credentials grant
     public function getPasswordToken($username, $password)
     {
@@ -222,6 +226,8 @@ class MarketAuthenticationService
      */
     public function refreshAuthenticatedUserToken($user)
     {
+        //Access tokens eventually expire; however some grants respond with a refresh token which enables the client to get a new access token without requiring the user to be redirected.
+
         $clientId = $this->clientId;
         $clientSecret = $this->clientSecret;
 
@@ -230,14 +236,22 @@ class MarketAuthenticationService
             $clientSecret = $this->passwordClientSecret;
         }
 
+        //The Flow
+        //The client sends a POST request with following body parameters to the authorization server:
         $formParams = [
-            'grant_type' => 'refresh_token',
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
-            'refresh_token' => $user->refresh_token,
+            'grant_type' => 'refresh_token',//with the value refresh_token
+            'client_id' => $clientId,//with the client’s ID
+            'client_secret' => $clientSecret,//with the client’s secret
+            'refresh_token' => $user->refresh_token,//with the refresh token
+            //scope with a space-delimited list of requested scope permissions. This is optional; if not sent the original scopes will be used, otherwise you can request a reduced set of scopes.
         ];
 
         $tokenData = $this->makeRequest('POST', 'oauth/token', [], $formParams);
+        //The authorization server will respond with a JSON object containing the following properties:
+        //token_type: with the value Bearer
+        //expires_in: with an integer representing the TTL of the access token
+        //access_token: the access token itself
+        //refresh_token: a refresh token that can be used to acquire a new access token when the original expires
 
         $this->storeValidToken($tokenData, $user->grant_type);
 
@@ -282,4 +296,42 @@ class MarketAuthenticationService
 
         return false;
     }
+
+    /*First party or third party client ?
+        -A first party client is a client that you trust enough to handle the end user’s authorization credentials. For example Spotify’s iPhone app is owned and developed by Spotify therefore they implicitly trust it.
+        -A third party client is a client that you don’t trust
+     * */
+
+    /*Access Token Owner?
+        -An access token represents a permission granted to a client to access some protected resources.
+        -If you are authorizing a machine to access resources and you don’t require the permission of a user to access said resources you should implement the client credentials grant.
+        -If you require the permission of a user to access resources you need to determine the client type.
+     * */
+
+    /*Client Type?
+        -Depending on whether or not the client is capable of keeping a secret will depend on which grant the client should use
+            -The client secret must be kept confidential.
+            -If a deployed app cannot keep the secret confidential, such as single-page Javascript apps or native apps, then the secret is not used, and ideally the service shouldn't issue a secret to these types of apps in the first place
+
+            -Web server apps are the most common type of application you encounter when dealing with OAuth servers.
+            -Web apps are written in a server-side language and run on a server where the source code of the application is not available to the public.
+            -This means the application is able to use its client secret when communicating with the authorization server, which can help avoid many attack vectors.
+
+            -Browser-based apps run entirely in the browser after loading the source code from a web page.
+            -Since the entire source code is available to the browser, they cannot maintain the confidentiality of a client secret, so the secret is not used in this case. The flow is based on the authorization code flow above
+
+            -Like browser-based apps, mobile apps also cannot maintain the confidentiality of a client secret.
+            -There are some additional concerns that mobile apps should keep in mind to ensure the security of the OAuth flow.
+
+        -If the client is a web application that has a server side component then you should implement the authorization code grant.
+        -If the client is a web application that has runs entirely on the front end (e.g. a single page web application) you should implement the password grant for a first party clients and the implicit grant for a third party clients.
+
+        -If the client is a native application such as a mobile app you should implement the password grant.
+        -Third party native applications should use the authorization code grant (via the native browser, not an embedded browser
+
+
+
+        -Client credentials grant is suitable for machine-to-machine authentication where a specific user’s permission to access data is not required.
+        -Password grant is a great user experience for trusted first party clients both on the web and in native device applications.
+    */
 }

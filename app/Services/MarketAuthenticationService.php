@@ -71,6 +71,9 @@ class MarketAuthenticationService
         return $tokenData->access_token;
     }
 
+    //we are going to start implementing all what we need to authenticate users
+    //into our client using the information provided by the API.
+
     /**
      * Generate the URL to obtain users authorization
      * @return string
@@ -102,6 +105,14 @@ class MarketAuthenticationService
         ];
 
         $tokenData = $this->makeRequest('POST', 'oauth/token', [], $formParams);
+        /*
+         * token_type: Bearer
+         * expires_in: 300
+         * access_token: Bearer xxxxxxxxxxxxxx
+         * refresh_token: xxxxxxxxxxxxxxxxxxxx
+         * token_expires_at: xxxxxxxxxxxxxxxxx
+         * grant_type: authorization_code
+         * */
 
         $this->storeValidToken($tokenData, 'authorization_code');
 
@@ -138,7 +149,7 @@ class MarketAuthenticationService
     {
         $user = auth()->user();
 
-        if (now()->lt($user->token_expires_at)) {
+        if (now()->lt($user->token_expires_at)) {//current time is less than the expiration time of the token
             return $user->access_token;
         }
 
@@ -171,6 +182,7 @@ class MarketAuthenticationService
 
         $this->storeValidToken($tokenData, $user->grant_type);
 
+        //save the new token
         $user->fill([
             'access_token' => $tokenData->access_token,
             'refresh_token' => $tokenData->refresh_token,
@@ -188,7 +200,7 @@ class MarketAuthenticationService
      */
     public function storeValidToken($tokenData, $grantType)
     {
-        $tokenData->token_expires_at = now()->addSeconds($tokenData->expires_in - 5);
+        $tokenData->token_expires_at = now()->addSeconds($tokenData->expires_in - 5);//remove 5 secs to give chance to retrieve some information before it expires
         $tokenData->access_token = "{$tokenData->token_type} {$tokenData->access_token}";
         $tokenData->grant_type = $grantType;
 
@@ -204,7 +216,7 @@ class MarketAuthenticationService
         if (session()->has('current_token')) {
             $tokenData = session()->get('current_token');
 
-            if (now()->lt($tokenData->token_expires_at)) {
+            if (now()->lt($tokenData->token_expires_at)) {//if the current time is less than the token expiration time
                 return $tokenData->access_token;
             }
         }

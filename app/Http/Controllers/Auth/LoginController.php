@@ -99,7 +99,9 @@ class LoginController extends Controller
             $this->loginUser($user, $request->has('remember'));
 
             return redirect()->intended('home');
+
         } catch (ClientException $e) {
+
             $message = $e->getResponse()->getBody();
 
             if (Str::contains($message, 'invalid_credentials')) {
@@ -129,9 +131,21 @@ class LoginController extends Controller
             $tokenData = $this->marketAuthenticationService->getCodeToken($request->code);
 
             $userData = $this->marketService->getUserInformation();
+            /*
+             * identifier: 1006
+             * name: user2
+             * email: user2@users.com
+             * isVerified: 0
+             * isAdmin: false
+             * creationDate: 2019-04-10 21:40
+             * lastChange: 2019-04-10 21:40
+             * deletedDate: null
+             * */
 
+            //registering or updating users with information from the API
             $user = $this->registerOrUpdateUser($userData, $tokenData);
 
+            //creating sessions for users validated by the HTTP service
             $this->loginUser($user);
 
             return redirect()->intended('home');
@@ -144,7 +158,6 @@ class LoginController extends Controller
 
     /**
      * Create or update a user using information from the API
-     * @return App\User
      */
     public function registerOrUpdateUser($userData, $tokenData)
     {
@@ -162,7 +175,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Create a user session in the HTTP CLient
+     * Create a user session in the HTTP Client
      * @return void
      */
     public function loginUser(User $user, $remember = true)

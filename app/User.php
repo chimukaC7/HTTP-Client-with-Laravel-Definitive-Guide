@@ -42,6 +42,7 @@ class User extends Authenticatable
      */
     protected $casts = [];
 
+    //So the best way to obtain the name is to obtain that directly from the API and not directly from our database.
     public function getNameAttribute()
     {
         $marketService = resolve(MarketService::class);

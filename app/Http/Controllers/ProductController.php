@@ -36,7 +36,6 @@ class ProductController extends Controller
 
     /**
      * Enable to purchase a products form the API
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function purchaseProduct(Request $request, $title, $id)
     {
@@ -67,7 +66,6 @@ class ProductController extends Controller
 
     /**
      * Create the product on the API
-     * @return \Illuminate\Http\Response
      */
     public function publishProduct(Request $request)
     {
@@ -79,14 +77,15 @@ class ProductController extends Controller
             'category' => 'required',
         ];
 
-        $productData = $this->validate($request, $rules);
-        $productData['picture'] = fopen($request->picture->path(), 'r');
+        $productData = $this->validate($request, $rules);//validate
+
+        $productData['picture'] = fopen($request->picture->path(), 'r');//read mode
 
         $productData = $this->marketService->publishProduct($request->user()->service_id, $productData);
 
-        $this->marketService->setProductCategory($productData->identifier, $request->category);
+        $this->marketService->setProductCategory($productData->identifier, $request->category);//attaching a category
 
-        $this->marketService->updateProduct($request->user()->service_id, $productData->identifier, ['situation' => 'available']);
+        $this->marketService->updateProduct($request->user()->service_id, $productData->identifier, ['situation' => 'available']);//changing the status to available
 
         return redirect()
             ->route('products.show',
@@ -94,6 +93,6 @@ class ProductController extends Controller
                     'title' => $productData->title,
                     'id' => $productData->identifier,
                 ])
-            ->with('succes', ['Product created successufully']);
+            ->with('success', ['Product created successfully']);
     }
 }

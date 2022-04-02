@@ -24,7 +24,6 @@ class MarketService
 
     /**
      * Obtains the list of products from the API
-     * @return stdClass
      */
     public function getProducts()
     {
@@ -32,8 +31,7 @@ class MarketService
     }
 
     /**
-     * Obtains the a products from the API
-     * @return stdClass
+     * Obtains a products from the API
      */
     public function getProduct($id)
     {
@@ -42,23 +40,21 @@ class MarketService
 
     /**
      * Publish a product on the API
-     * @return stdClass
      */
     public function publishProduct($sellerId, $productData)
     {
         return $this->makeRequest(
             'POST',
             "sellers/{$sellerId}/products",
-            [],
-            $productData,
-            [],
+            [],//query params
+            $productData,//body
+            [],//headers
             $hasFile = true
         );
     }
 
     /**
      * Associate a product to the category
-     * @return stdClass
      */
     public function setProductCategory($productId, $categoryId)
     {
@@ -70,10 +66,12 @@ class MarketService
 
     /**
      * Update an existing product
-     * @return sdtClass
      */
     public function updateProduct($sellerId, $productId, $productData)
     {
+        //as the product may have an image in the body, we cannot
+        //send PUT or PATCH request because we cannot send raw data into these kinds of requests
+        //So we need to send a post request, but we need to, let's say, spoof the method
         $productData['_method'] = 'PUT';
 
         return $this->makeRequest(

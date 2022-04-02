@@ -61,6 +61,17 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{--
+                                    We call, for example, add the name in our database, you in our model adding our migration's and obtain
+                                    the user once we obtain the user information and save that along with the active stock and the refreshed
+                                    stock and expiration time, etc..
+
+                                    But this is not a very good idea because if for some moment their name change the same for the email
+                                    and any other components, we will need to create additional logics to constantly still verifying if
+                                    something changed to obtain that.
+
+                                    So the best way to obtain the name is to obtain that directly from the API and not directly from our database.
+                                    --}}
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 

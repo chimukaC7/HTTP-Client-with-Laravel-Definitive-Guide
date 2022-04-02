@@ -15,18 +15,19 @@ trait ConsumesExternalServices
     {
         $client = new Client([
             'base_uri' => $this->baseUri,
+            'verify' => false
         ]);
 
         if (method_exists($this, 'resolveAuthorization')) {
             $this->resolveAuthorization($queryParams, $formParams, $headers);
         }
 
-        $bodyType = 'form_params';
+        $bodyType = 'form_params';//default
 
         if ($hasFile) {
             $bodyType = 'multipart';
 
-            $multipart = [];
+            $multipart = [];//fill the array using the foreach
 
             foreach ($formParams as $name => $contents) {
                 $multipart[] = ['name' => $name, 'contents' => $contents];

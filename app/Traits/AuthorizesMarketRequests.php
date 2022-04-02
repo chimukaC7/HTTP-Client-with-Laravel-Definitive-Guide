@@ -25,6 +25,7 @@ trait AuthorizesMarketRequests
     {
         $authenticationService = resolve(MarketAuthenticationService::class);
 
+        //determining when to use a user token or a client token
         if (auth()->user()) {
             return $authenticationService->getAuthenticatedUserToken();
         }

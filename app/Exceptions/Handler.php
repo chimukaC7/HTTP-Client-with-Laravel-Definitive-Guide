@@ -58,21 +58,38 @@ class Handler extends ExceptionHandler
 
     /**
      * Handle correctly the exceptions when sending requests
-     * @return \Illuminate\Http\Response
      */
     protected function handleClientException($exception, $request)
     {
         $code = $exception->getCode();
 
-        $response = json_decode($exception->getResponse()->getBody()->getContents());
-        $errorMessage = $response->error;
+        $response = json_decode($exception->getResponse()->getBody()->getContents());//response contents
+        $errorMessage = $response->error;//from the response obtain the error message
 
         switch ($code) {
+            //handling authentication errors when consuming the API
+
+            //The most important exception that we have to handle in our HTTP client or any suitable client is the eventual
+            //case the failure of authenticating an HTTP request
+            // normally because the access token failed, the access token expires, the owning system revoked the access token to  our client, etc
             case Response::HTTP_UNAUTHORIZED:
-                $request->session()->invalidate();
+
+                //The first one is that the user is unauthenticated.
+                //That means that the user's access token is not valid.
+                //So we need to invalidate the session, removing the access tokens that we have stored there and obligate
+                //the client to use the client credentials again.
+                //And after closing the user's session, obligate the user to start a session again, basically authorize us again.
+
+                //But there is another possible action.
+                //That is what happen if for some reason we got revoked directly from the API .
+                //For example, our client credentials are not valid anymore.
+                //So in that case, any kind of possible request is going to fail because our credentials are invalid
+                //we need to immediately resolve that manually changing or updating our client.
+
+                $request->session()->invalidate();//So in both cases, we first need to invalidate the solution.
 
                 if ($request->user()) {
-                    Auth::logout();
+                    Auth::logout();//if we have a user authenticated, we need to immediately log out this user.
 
                     return redirect()
                         ->route('welcome')

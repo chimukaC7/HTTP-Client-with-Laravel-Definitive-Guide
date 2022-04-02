@@ -86,7 +86,6 @@ class MarketService
 
     /**
      * Allows to purchase a product
-     * @return sydClass
      */
     public function purchaseProduct($productId, $buyerId, $quantity)
     {
@@ -100,7 +99,6 @@ class MarketService
 
     /**
      * Obtains the list of categories from the API
-     * @return stdClass
      */
     public function getCategories()
     {
@@ -108,8 +106,7 @@ class MarketService
     }
 
     /**
-     * Obtains the a products from the API
-     * @return stdClass
+     * Obtains the products from the API
      */
     public function getCategoryProducts($id)
     {
@@ -127,7 +124,6 @@ class MarketService
 
     /**
      * Obtains the list of purchases
-     * @return stdClass
      */
     public function getPurchases($buyerId)
     {
@@ -136,7 +132,6 @@ class MarketService
 
     /**
      * Obtains the list of publications
-     * @return stdClass
      */
     public function getPublications($sellerId)
     {

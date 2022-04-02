@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-trait InteractsWithMarketResponses
+trait Responses
 {
     /**
      * Decode correspondingly the response

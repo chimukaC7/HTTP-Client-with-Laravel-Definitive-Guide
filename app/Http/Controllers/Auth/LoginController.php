@@ -62,7 +62,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        $authorizationUrl = $this->marketAuthenticationService->resolveAuthorizationUrl();
+        $authorizationUrl = $this->marketAuthenticationService->generateAuthorizationUrl();
 
         return view('auth.login')
             ->with(['authorizationUrl' => $authorizationUrl]);
@@ -127,7 +127,12 @@ class LoginController extends Controller
      */
     public function authorization(Request $request)
     {
-        if ($request->has('code')) {
+        //If the user clicks "Allow," the service redirects the user back to your site with an authorization code
+        //If the user approves the client they will be redirected from the authorization server back to the client (specifically to the redirect URI) with the following parameters in the query string:
+        //code: with the authorization code
+        //state: with the state parameter sent in the original request. You should compare this value with the value stored in the user’s session to ensure the authorization code obtained is in response to requests made by this client rather than another client application.
+
+        if ($request->has('code')) {//The server returns the authorization code in the query string
             $tokenData = $this->marketAuthenticationService->getCodeToken($request->code);
 
             $userData = $this->marketService->getUserInformation();

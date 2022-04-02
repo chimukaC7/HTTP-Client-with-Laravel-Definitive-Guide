@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Traits\AuthorizesMarketRequests;
 use App\Traits\ConsumesExternalServices;
-use App\Traits\InteractsWithMarketResponses;
+use App\Traits\Responses;
 
 class MarketService
 {
-    use ConsumesExternalServices, AuthorizesMarketRequests, InteractsWithMarketResponses;
+    use ConsumesExternalServices, AuthorizesMarketRequests, Responses;
 
     /**
      * The URL to send the requests

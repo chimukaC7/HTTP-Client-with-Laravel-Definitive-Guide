@@ -58,6 +58,7 @@
                                     {{ __('Login') }}
                                 </button>
 
+                                {{--The authorization code grant should be very familiar if you’ve ever signed into an application using your Facebook or Google account.--}}
                                 {{--more like the way login with google or facebook works --}}
                                 <a href="{{$authorizationUrl}}" class="btn btn-success">
                                     Connect with API

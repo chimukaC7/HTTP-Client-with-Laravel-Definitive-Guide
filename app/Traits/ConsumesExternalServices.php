@@ -8,7 +8,6 @@ trait ConsumesExternalServices
 {
     /**
      * Send a request to any service
-     * @return sdtClass|string
      * [] -> optional
      */
     public function makeRequest($method, $requestUrl, $queryParams = [], $formParams = [], $headers = [], $hasFile = false)

@@ -10,10 +10,7 @@ class MarketService
 {
     use ConsumesExternalServices, AuthorizesMarketRequests, Responses;
 
-    /**
-     * The URL to send the requests
-     * @var string
-     */
+    //The URL to send the requests
     protected $baseUri;
 
     public function __construct()

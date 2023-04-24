@@ -6,7 +6,6 @@ trait Responses
 {
     /**
      * Decode correspondingly the response
-     * @return stdClass
      */
     public function decodeResponse($response)
     {
@@ -17,7 +16,6 @@ trait Responses
 
     /**
      * Resolve when the request failed
-     * @return void
      */
     public function checkIfErrorResponse($response)
     {
@@ -25,4 +23,5 @@ trait Responses
             throw new \Exception("Something failed: {$response->error}");
         }
     }
+
 }

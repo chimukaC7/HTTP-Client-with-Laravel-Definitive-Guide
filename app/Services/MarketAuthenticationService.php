@@ -327,7 +327,7 @@ class MarketAuthenticationService
         -If the client is a web application that has runs entirely on the front end (e.g. a single page web application) you should implement the password grant for a first party clients and the implicit grant for a third party clients.
 
         -If the client is a native application such as a mobile app you should implement the password grant.
-        -Third party native applications should use the authorization code grant (via the native browser, not an embedded browser
+        -Third party native applications should use the authorization code grant via the native browser, not an embedded browser
 
 
 
